@@ -50,19 +50,15 @@ const calculateScores = ([firstPlayerChoice, secondPlayerChoice]) => {
     let secondPlayerScore = 0
     if (firstPlayerChoice === 'A') {
         matchResult = determineEachPlayerScore(rockCase[transformedSecondPlayerChoice])
-        console.log(rockCase[transformedSecondPlayerChoice])
     } else if (firstPlayerChoice === 'B') {
         matchResult = determineEachPlayerScore(paperCase[transformedSecondPlayerChoice])
-        console.log(paperCase[transformedSecondPlayerChoice])
     } else if (firstPlayerChoice === 'C') {
         matchResult = determineEachPlayerScore(scissorsCase[transformedSecondPlayerChoice])
-        console.log(scissorsCase[transformedSecondPlayerChoice])
     }
     firstPlayerScore  += matchResult.firstPlayer
     firstPlayerScore  += choicesScore[transformedFirstPlayerChoice]
     secondPlayerScore += matchResult.secondPlayer
     secondPlayerScore += choicesScore[transformedSecondPlayerChoice]
-    console.log(firstPlayerScore, secondPlayerScore);
     return [ firstPlayerScore, secondPlayerScore ]
 }
 
@@ -78,3 +74,24 @@ const finalResult = firstPlayerFinalScore > secondPlayerFinalScore
     ? 'Player one wins' : firstPlayerFinalScore === secondPlayerFinalScore 
     ? "a draw" : 'Player two wins'
 console.log(`Therefore, the final result is: ${finalResult}`);
+
+/***** Last part of the challenge *****/
+
+/* The key to obtain these combinations was thinking about the final score of each case,
+    e.g.: "A Y" means that we need to make a draw, which gives 3 points and 1 more point using
+    the rock, resulting in 4 points. */
+const combinations = {
+    A: { X: 3, Y: 4, Z: 8 },
+    B: { X: 1, Y: 5, Z: 9 },
+    C: { X: 2, Y: 6, Z: 7 },
+}
+
+const calculateSecondPlayerScore = ([firstPlayerChoice, secondPlayerChoice]) => {
+    return combinations[firstPlayerChoice][secondPlayerChoice]
+}
+
+const scoreSecondPart = rawData.split('\n').filter(turn => turn.trim())
+    .map(turn => calculateSecondPlayerScore(turn.split(' ')))
+    .reduce((sum, score) => sum + score)
+
+console.log(`The score for the second player is: ${scoreSecondPart}`);
